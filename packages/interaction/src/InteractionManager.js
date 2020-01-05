@@ -686,11 +686,11 @@ export class InteractionManager extends EventEmitter
 
         if (useSystemTicker)
         {
-            this.addTickerListener();
+            this.addTicker();
         }
         else
         {
-            this.removeTickerListener();
+            this.removeTicker();
         }
     }
 
@@ -730,8 +730,6 @@ export class InteractionManager extends EventEmitter
      */
     setTargetElement(element, resolution = 1)
     {
-        this.removeTickerListener();
-
         this.removeEvents();
 
         this.interactionDOMElement = element;
@@ -740,17 +738,17 @@ export class InteractionManager extends EventEmitter
 
         this.addEvents();
 
-        this.addTickerListener();
+        this.addTicker();
     }
 
     /**
-     * Add the ticker listener
+     * Add the ticker
      *
      * @private
      */
-    addTickerListener()
+    addTicker()
     {
-        if (this.tickerAdded || !this.interactionDOMElement || !this._useSystemTicker)
+        if (this.tickerAdded || !this.interactionDOMElement || !this._useSystemTicker) {
         {
             return;
         }
@@ -761,11 +759,11 @@ export class InteractionManager extends EventEmitter
     }
 
     /**
-     * Remove the ticker listener
+     * Remove the ticker
      *
      * @private
      */
-    removeTickerListener()
+    removeTicker()
     {
         if (!this.tickerAdded)
         {
@@ -845,10 +843,17 @@ export class InteractionManager extends EventEmitter
      */
     removeEvents()
     {
-        if (!this.eventsAdded || !this.interactionDOMElement)
+        if (!this.eventsAdded)
         {
             return;
         }
+
+        if (!this.interactionDOMElement)
+        {
+            return;
+        }
+
+        Ticker.system.remove(this.tickerUpdate, this);
 
         if (window.navigator.msPointerEnabled)
         {
@@ -1799,7 +1804,7 @@ export class InteractionManager extends EventEmitter
     {
         this.removeEvents();
 
-        this.removeTickerListener();
+        this.removeTicker();
 
         this.removeAllListeners();
 

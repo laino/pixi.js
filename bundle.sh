@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#yarn build
+yarn build
 
 cd bundles/pixi.js
 
